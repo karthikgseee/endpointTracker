@@ -1,38 +1,91 @@
-.App {
+.app {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+h1 {
   text-align: center;
+  color: #2c3e50;
+  margin-bottom: 1rem;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.update-indicator {
+  text-align: center;
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  font-size: 0.9em;
+  animation: pulse 2s infinite;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.status-table {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr 2fr;
+  gap: 1rem;
+  padding: 1rem;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+.table-header {
+  background-color: #34495e;
   color: white;
+  font-weight: bold;
 }
-
-.App-link {
-  color: #61dafb;
+.table-row {
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #ecf0f1;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.table-row:last-child {
+  border-bottom: none;
+}
+.url {
+  color: #3498db;
+  word-break: break-all;
+}
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.status-dot {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.status-dot.online {
+  background-color: #2ecc71;
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.3);
+}
+.status-dot.offline {
+  background-color: #e74c3c;
+  box-shadow: 0 0 8px rgba(231, 76, 60, 0.3);
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+@media (max-width: 768px) {
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr;
+    padding: 1rem 0.5rem;
+  }
+  .table-header {
+    display: none;
+  }
+  .status-indicator {
+    justify-content: center;
   }
 }
