@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
+
 const App = () => {
   const [services, setServices] = useState([
     { id: 1, name: "GitHub API", url: "https://api.github.com" },
@@ -11,21 +12,27 @@ const App = () => {
     { id: 7, name: "Framer", url: "https://framer.com/projects/" },
     { id: 8, name: "Wiki", url: "https://www.wikipedia.org/" },
   ]);
+
   const servicesRef = useRef(services);
+
   useEffect(() => {
     servicesRef.current = services;
   }, [services]);
+
   const checkStatus = async (service) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     try {
       const response = await fetch(service.url, {
         method: "GET",
         mode: "no-cors",
         signal: controller.signal,
       });
+
       const status =
         response.ok || response.type === "opaque" ? "Online" : "Offline";
+
       return {
         ...service,
         status,
@@ -43,11 +50,11 @@ const App = () => {
       clearTimeout(timeoutId);
     }
   };
-  const refreshStatus = async () => {
+
+  const refreshStatus = useCallback(async () => {
     const updatedServices = await Promise.all(
       servicesRef.current.map(async (service) => {
         const updated = await checkStatus(service);
-        // Retry once if offline
         if (updated.status === "Offline") {
           return await checkStatus(service);
         }
@@ -55,12 +62,14 @@ const App = () => {
       })
     );
     setServices(updatedServices);
-  };
+  }, []);
+
   useEffect(() => {
     refreshStatus();
-    const interval = setInterval(refreshStatus, 10000); // 10 seconds
+    const interval = setInterval(refreshStatus, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [refreshStatus]);
+
   return (
     <div className="app">
       <h1>Service Status Monitor</h1>
@@ -92,4 +101,5 @@ const App = () => {
     </div>
   );
 };
+
 export default App;
